@@ -287,8 +287,8 @@ public class HgMaterial extends ScmMaterial {
 
     @Override public String getShortRevision(String revision) {
         if (revision == null) return null;
-        if (revision.length()<12) return revision;
-        return revision.substring(0,12);
+        if (revision.length() < 3) return revision;
+        return revision.substring(0, 3);
     }
 
     public Class getInstanceType() {

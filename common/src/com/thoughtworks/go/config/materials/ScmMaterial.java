@@ -129,6 +129,12 @@ public abstract class ScmMaterial extends AbstractMaterial {
         setGoRevisionVariables(environmentVariableContext, fromRevision, toRevision);
     }
 
+    public void populateEnvironmentVariables(Map<String, String> results, MaterialRevision materialRevision) {
+        final String revision = materialRevision.getLatestRevisionString();
+        results.put(CaseInsensitiveString.str(name), revision);
+        results.put(CaseInsensitiveString.str(name) + "_SHORT", getShortRevision(revision));
+    }
+
     private void setGoRevisionVariables(EnvironmentVariableContext environmentVariableContext, String fromRevision, String toRevision) {
         setVariableWithName(environmentVariableContext, toRevision, GO_REVISION);
         setVariableWithName(environmentVariableContext, toRevision, GO_TO_REVISION);

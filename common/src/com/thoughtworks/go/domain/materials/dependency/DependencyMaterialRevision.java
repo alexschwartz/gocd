@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 
+import com.thoughtworks.go.config.CaseInsensitiveString;
 import com.thoughtworks.go.domain.MaterialRevision;
 import com.thoughtworks.go.domain.materials.Material;
 import com.thoughtworks.go.domain.materials.Modification;
@@ -59,6 +60,10 @@ public class DependencyMaterialRevision implements Revision {
 
     public void putRevision(Map<String, String> map) {
         map.put(pipelineName, pipelineLabel);
+    }
+
+    public void populateEnvironmentVariables(Map<String, String> results, MaterialRevision materialRevision) {
+        results.put(getPipelineName(), getPipelineLabel());
     }
 
     public boolean equals(Object o) {

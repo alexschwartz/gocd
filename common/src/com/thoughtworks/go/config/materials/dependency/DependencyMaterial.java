@@ -163,8 +163,22 @@ public class DependencyMaterial extends AbstractMaterial {
 
     public void populateEnvironmentContext(EnvironmentVariableContext context, MaterialRevision materialRevision, File workingDir) {
         DependencyMaterialRevision revision = (DependencyMaterialRevision) materialRevision.getRevision();
-        context.setPropertyWithEscape(format("GO_DEPENDENCY_LABEL_%s", getName()), revision.getPipelineLabel());
-        context.setPropertyWithEscape(format("GO_DEPENDENCY_LOCATOR_%s", getName()), revision.getRevision());
+
+        final String keyName = format("GO_DEPENDENCY_LABEL_%s", getName());
+        final String keyLabel = format("GO_DEPENDENCY_LOCATOR_%s", getName());
+
+        context.setPropertyWithEscape(keyName, revision.getPipelineLabel());
+        context.setPropertyWithEscape(keyLabel, revision.getRevision());
+    }
+
+    public void populateEnvironmentVariables(Map<String, String> results, MaterialRevision materialRevision) {
+        DependencyMaterialRevision revision = (DependencyMaterialRevision) materialRevision.getRevision();
+
+        final String keyName = format("%s_LABEL", getName());
+        final String keyLabel = format("%s_LOCATOR", getName());
+
+        results.put(keyName, revision.getPipelineLabel());
+        results.put(keyLabel, revision.getRevision());
     }
 
     public boolean isAutoUpdate() {

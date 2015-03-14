@@ -277,18 +277,13 @@ public class MaterialRevisions implements Serializable, Iterable<MaterialRevisio
         for (MaterialRevision mr : revisions) {
             CaseInsensitiveString materialName = mr.getMaterial().getName();
             if (!CaseInsensitiveString.isBlank(materialName)) {
-                results.put(CaseInsensitiveString.str(materialName), getRevisionValueOf(mr.getRevision()));
+                mr.getMaterial().populateEnvironmentVariables(results, mr);
             }
         }
         return results;
     }
 
-    private String getRevisionValueOf(Revision revision) {
-        if (revision instanceof DependencyMaterialRevision) {
-            return ((DependencyMaterialRevision) revision).getPipelineLabel();
-        }
-        return revision.getRevision();
-    }
+
 
     public DependencyMaterialRevision findDependencyMaterialRevision(String pipelineName) {
         for (MaterialRevision materialRevision : this) {

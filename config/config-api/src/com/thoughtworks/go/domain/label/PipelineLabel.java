@@ -39,10 +39,11 @@ public class PipelineLabel implements Serializable {
         return label;
     }
 
-    public void updateLabel(Map<String, String> namedRevisions) {
-        for (Map.Entry<String, String> namedRevision : namedRevisions.entrySet()) {
-            String revision = namedRevision.getValue();
-            label = label.replaceAll("(?i)\\$\\{" + namedRevision.getKey() + "\\}", revision);
+    public void updateLabel(Map<String, String> buildVariables) {
+        for (Map.Entry<String, String> entry : buildVariables.entrySet()) {
+            System.out.println("entry: " + entry);
+            String revision = entry.getValue();
+            label = label.replaceAll("(?i)\\$\\{" + entry.getKey() + "\\}", revision);
         }
         label = StringUtils.substring(label, 0, 255);
     }

@@ -68,6 +68,8 @@ public interface Material extends Serializable {
 
     void populateEnvironmentContext(EnvironmentVariableContext context, MaterialRevision materialRevision, File workingDir);
 
+    void populateEnvironmentVariables(Map<String, String> results, MaterialRevision materialRevision);
+
     String getDisplayName();
 
     String getType();
@@ -99,4 +101,5 @@ public interface Material extends Serializable {
     String getLongDescription();
 
     MaterialConfig config();
+
 }

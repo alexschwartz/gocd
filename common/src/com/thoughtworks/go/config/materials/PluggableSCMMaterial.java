@@ -284,6 +284,11 @@ public class PluggableSCMMaterial extends AbstractMaterial {
         }
     }
 
+    @Override
+    public void populateEnvironmentVariables(Map<String, String> results, MaterialRevision materialRevision) {
+
+    }
+
     private String getEnvironmentVariableKey(String keyPattern, String givenKey) {
         return escapeEnvironmentVariable(upperCase(format(keyPattern, getName().toString(), givenKey)));
     }

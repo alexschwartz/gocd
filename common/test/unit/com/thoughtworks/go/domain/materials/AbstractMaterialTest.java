@@ -108,6 +108,11 @@ public class AbstractMaterialTest {
             throw new UnsupportedOperationException();
         }
 
+        @Override
+        public void populateEnvironmentVariables(Map<String, String> results, MaterialRevision materialRevision) {
+            throw new UnsupportedOperationException();
+        }
+
         public String getDisplayName() {
             return displayName;
         }

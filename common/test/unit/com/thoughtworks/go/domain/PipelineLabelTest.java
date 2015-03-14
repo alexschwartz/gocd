@@ -70,6 +70,20 @@ public class PipelineLabelTest {
     }
 
     @Test
+    public void shouldReplaceTheTemplateWitAShortRev() throws Exception {
+        PipelineLabel label = PipelineLabel.create("release-${svnMaterial}-${hg_SHORT}");
+        MaterialRevisions materialRevisions = ModificationsMother.oneUserOneFile();
+        HgMaterial material = MaterialsMother.hgMaterial();
+        material.setName(new CaseInsensitiveString("hg"));
+        Modification modification = new Modification();
+        modification.setRevision("ae09876hj");
+
+        materialRevisions.addRevision(material, modification);
+        label.updateLabel(materialRevisions.getNamedRevisions());
+        assertThat(label.toString(), is("release-" + ModificationsMother.currentRevision() + "-ae0"));
+    }
+
+    @Test
     public void shouldReplaceTheTemplateWithMultipleMaterialRevision() throws Exception {
         PipelineLabel label = PipelineLabel.create("release-${svnMaterial}-${hg}");
         MaterialRevisions materialRevisions = ModificationsMother.oneUserOneFile();

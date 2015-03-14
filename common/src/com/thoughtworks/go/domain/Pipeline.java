@@ -150,9 +150,9 @@ public class Pipeline extends PersistentObject implements PipelineInfo {
     }
 
     private void updateLabel() {
-        Map<String, String> namedRevisions = this.getMaterialRevisions().getNamedRevisions();
-        namedRevisions.put(COUNT, counter.toString());
-        this.pipelineLabel.updateLabel(namedRevisions);
+        Map<String, String> buildVariables = this.getMaterialRevisions().getNamedRevisions();
+        buildVariables.put(COUNT, counter.toString());
+        this.pipelineLabel.updateLabel(buildVariables);
     }
 
     public boolean isAnyStageActive() {
@@ -172,11 +172,11 @@ public class Pipeline extends PersistentObject implements PipelineInfo {
     }
 
     private void setApprovedBy(String approvedBy) {
-        buildCause.setApprover(approvedBy);
+        this.buildCause.setApprover(approvedBy);
     }
 
     public MaterialRevisions getMaterialRevisions() {
-        return buildCause.getMaterialRevisions();
+        return this.buildCause.getMaterialRevisions();
     }
 
     public Date getModifiedDate() {
