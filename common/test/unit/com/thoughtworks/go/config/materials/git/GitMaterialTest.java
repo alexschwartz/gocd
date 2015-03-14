@@ -17,9 +17,11 @@
 package com.thoughtworks.go.config.materials.git;
 
 import com.thoughtworks.go.config.materials.Materials;
+import com.thoughtworks.go.config.materials.ScmMaterial;
 import com.thoughtworks.go.domain.MaterialRevision;
 import com.thoughtworks.go.domain.MaterialRevisions;
 import com.thoughtworks.go.domain.materials.*;
+import com.thoughtworks.go.domain.materials.TestSubprocessExecutionContext;
 import com.thoughtworks.go.domain.materials.git.GitTestRepo;
 import com.thoughtworks.go.domain.materials.mercurial.StringRevision;
 import com.thoughtworks.go.helper.GitSubmoduleRepos;
@@ -29,6 +31,7 @@ import com.thoughtworks.go.util.JsonUtils;
 import com.thoughtworks.go.util.JsonValue;
 import com.thoughtworks.go.util.TestFileUtil;
 import com.thoughtworks.go.util.command.CommandLine;
+import com.thoughtworks.go.util.command.EnvironmentVariableContext;
 import com.thoughtworks.go.util.command.InMemoryStreamConsumer;
 import com.thoughtworks.go.util.command.ProcessOutputStreamConsumer;
 import com.thoughtworks.go.util.json.JsonMap;
@@ -94,6 +97,26 @@ public class GitMaterialTest {
     public void teardown() throws Exception {
         TestRepo.internalTearDown();
     }
+
+    @Test
+    public void populateEnvironmentContextShouldSetFromAndToRevisionEnvironmentVariables() {
+        List<Modification> modifications = git.modificationsSince(workingDir, REVISION_0, new TestSubprocessExecutionContext());
+
+        EnvironmentVariableContext ctx = new EnvironmentVariableContext();
+        MaterialRevision materialRevision = new MaterialRevision(git, modifications);
+        assertThat(ctx.getProperty(ScmMaterial.GO_FROM_REVISION), is(nullValue()));
+        assertThat(ctx.getProperty(ScmMaterial.GO_TO_REVISION), is(nullValue()));
+        assertThat(ctx.getProperty(ScmMaterial.GO_REVISION), is(nullValue()));
+
+        git.populateEnvironmentContext(ctx, materialRevision, new File("."));
+
+        assertThat(ctx.getProperty(ScmMaterial.GO_FROM_REVISION), is(REVISION_1.getRevision()));
+        assertThat(ctx.getProperty(ScmMaterial.GO_TO_REVISION), is(REVISION_4.getRevision()));
+        assertThat(ctx.getProperty(ScmMaterial.GO_REVISION), is(REVISION_4.getRevision()));
+
+        assertThat(ctx.getProperty("GO_REVISION_SHORT"), is(REVISION_4.getRevision().substring(0, 7)));
+    }
+
 
     @Test
     public void shouldNotDisplayPasswordInStringRepresentation() {
