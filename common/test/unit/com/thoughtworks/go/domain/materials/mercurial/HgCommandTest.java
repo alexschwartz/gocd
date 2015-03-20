@@ -39,6 +39,7 @@ import java.util.List;
 import static com.thoughtworks.go.util.FileUtil.deleteFolder;
 import static com.thoughtworks.go.util.command.ProcessOutputStreamConsumer.inMemoryConsumer;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -199,8 +200,8 @@ public class HgCommandTest {
             branchNames.add(StringUtils.split(branchDetails, " ")[0]);
         }
         assertThat(branchNames.size(), is(2));
-        assertThat(branchNames.contains(branchName), is(true));
-        assertThat(branchNames.contains("default"), is(true));
+        assertThat(branchNames, contains(branchName));
+        assertThat(branchNames, contains("default"));
     }
 
     private void addLockTo(File hgRepoRootDir) throws IOException {

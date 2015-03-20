@@ -25,6 +25,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -44,9 +45,9 @@ public class ServerCallTest {
         try {
             ServerCall.invoke(getMethod);
         } catch (Exception ex) {
-            assertThat(ex.getMessage().contains(
+            assertThat(ex.getMessage(), containsString(
                     "This agent might be incompatible with your Go Server."
-                            + "Please fix the version mismatch between Go Server and Go Agent."), is(true));
+                            + "Please fix the version mismatch between Go Server and Go Agent."));
         }
 
     }

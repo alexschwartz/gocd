@@ -52,11 +52,13 @@ import com.thoughtworks.go.helper.StageConfigMother;
 import com.thoughtworks.go.security.GoCipher;
 import com.thoughtworks.go.util.Node;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import static com.thoughtworks.go.util.DataStructureUtils.a;
 import static com.thoughtworks.go.util.DataStructureUtils.m;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
@@ -230,9 +232,7 @@ public class PipelineConfigTest {
         pipelineConfig.setLabelTemplate("pipeline-${COUNT}-${mymaterial}${hi}");
 
         Set<String> variables = pipelineConfig.getTemplateVariables();
-        assertThat(variables.contains("COUNT"), is(true));
-        assertThat(variables.contains("mymaterial"), is(true));
-        assertThat(variables.contains("hi"), is(true));
+        assertThat(variables, contains("COUNT", "mymaterial", "hi"));
     }
 
     @Test
@@ -241,10 +241,7 @@ public class PipelineConfigTest {
         pipelineConfig.setLabelTemplate("pipeline-${COUN_T}-${my-material}${h.i}${**}");
 
         Set<String> variables = pipelineConfig.getTemplateVariables();
-        assertThat(variables.contains("COUN_T"), is(true));
-        assertThat(variables.contains("my-material"), is(true));
-        assertThat(variables.contains("h.i"), is(true));
-        assertThat(variables.contains("**"), is(true));
+        assertThat(variables, hasItems("COUN_T", "my-material", "h.i", "**"));
     }
 
     @Test
@@ -252,7 +249,9 @@ public class PipelineConfigTest {
         PipelineConfig pipelineConfig = new PipelineConfig(new CaseInsensitiveString("cruise"), new MaterialConfigs());
         pipelineConfig.setLabelTemplate("pipeline-${COUN_T}:${repo:package}");
         Set<String> variables = pipelineConfig.getTemplateVariables();
-        assertThat(variables.contains("repo:package"), is(true));
+
+        System.out.println("variables: " + variables);
+        assertThat(variables, hasItem("repo:package"));
     }
 
     @Test
@@ -665,8 +664,7 @@ public class PipelineConfigTest {
 
         List<FetchTask> fetchTasks = pipelineConfig.getFetchTasks();
         assertThat(fetchTasks.size(), is(2));
-        assertThat(fetchTasks.contains(firstFetch), is(true));
-        assertThat(fetchTasks.contains(secondFetch), is(true));
+        assertThat(fetchTasks, contains(firstFetch, secondFetch));
     }
 
     @Test

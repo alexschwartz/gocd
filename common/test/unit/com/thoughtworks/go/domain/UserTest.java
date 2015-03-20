@@ -27,6 +27,7 @@ import org.hamcrest.core.Is;
 import org.junit.Test;
 
 import static com.thoughtworks.go.helper.ModificationsMother.aCheckIn;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
@@ -231,19 +232,21 @@ public class UserTest {
     @Test
     public void shouldRemoveNotificationFilter(){
         User user = new User("u");
-        NotificationFilter filter1 = new NotificationFilter("p1","s1", StageEvent.Fails, true);
+        NotificationFilter filter1 = new NotificationFilter("p1", "s1", StageEvent.Fails, true);
         filter1.setId(1);
-        NotificationFilter filter2 = new NotificationFilter("p1","s2", StageEvent.Fails, true);
-        filter2.setId(2);
         user.addNotificationFilter(filter1);
+
+        NotificationFilter filter2 = new NotificationFilter("p1", "s2", StageEvent.Fails, true);
+        filter2.setId(2);
         user.addNotificationFilter(filter2);
 
         user.removeNotificationFilter(filter1.getId());
 
         assertThat(user.getNotificationFilters().size(), is(1));
-        assertThat(user.getNotificationFilters().contains(filter2), is(true));
+        assertThat(user.getNotificationFilters(), contains(filter2));
 
     }
+
     private String chars(int numbersOf) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < numbersOf - "@gmail.com".length(); i++) {

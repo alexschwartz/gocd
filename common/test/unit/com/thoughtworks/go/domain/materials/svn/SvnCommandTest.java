@@ -469,13 +469,15 @@ public class SvnCommandTest {
     public void shouldAddNothingWhenNoUsernameIsNotProvided() throws IOException {
         SvnCommand commandWithNullUsername = new SvnCommand(null, "url", null, null, false);
 
-        assertThat(commandWithNullUsername.buildSvnLogCommandForLatestOne().toString().contains("--password="), is(false));
-        assertThat(commandWithNullUsername.buildSvnLogCommandForLatestOne().toString().contains("--username"), is(false));
+        final String commandString1 = commandWithNullUsername.buildSvnLogCommandForLatestOne().toString();
+        assertThat(commandString1, not(containsString("--password=")));
+        assertThat(commandString1, not(containsString("--username")));
 
         SvnCommand commandWithEmptyUsername = new SvnCommand(null, "url", " ", " ", false);
 
-        assertThat(commandWithEmptyUsername.buildSvnLogCommandForLatestOne().toString().contains("--password="), is(false));
-        assertThat(commandWithEmptyUsername.buildSvnLogCommandForLatestOne().toString().contains("--username"), is(false));
+        final String commandString2 = commandWithEmptyUsername.buildSvnLogCommandForLatestOne().toString();
+        assertThat(commandString2, not(containsString("--password=")));
+        assertThat(commandString2, not(containsString("--username")));
     }
 
     @Test

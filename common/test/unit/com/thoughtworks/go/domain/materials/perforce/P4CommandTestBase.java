@@ -79,11 +79,13 @@ public abstract class P4CommandTestBase extends PerforceFixture {
         InMemoryStreamConsumer output = inMemoryConsumer();
         p4.execute(p4.p4("client", "-o"), null, output, true);
         String actualClientSpec = output.getStdOut();
-        assertThat(actualClientSpec.contains("Client:\tp4test_1"), Is.is(true));
-        assertThat(actualClientSpec.contains("Options:\tnoallwrite clobber nocompress unlocked nomodtime rmdir"), Is.is(true));
-        assertThat(actualClientSpec.contains("View:\n\t//depot/... //p4test_1/..."), Is.is(true));
-        assertThat(actualClientSpec.contains("LineEnd:\tlocal"), Is.is(true));
+        assertThat(actualClientSpec.contains("Client:\tp4test_1"), is(true));
+        assertThat(actualClientSpec.contains("Options:\tnoallwrite clobber nocompress unlocked nomodtime rmdir"), is(true));
+        assertThat(actualClientSpec.contains("View:\n\t//depot/... //p4test_1/..."), is(true));
+        assertThat(actualClientSpec.contains("LineEnd:\tlocal"), is(true));
     }
+
+
 
     @Test
     public void shouldGetLatestChange() throws Exception {

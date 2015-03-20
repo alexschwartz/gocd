@@ -51,6 +51,7 @@ import static java.lang.System.getProperty;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
 import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -88,19 +89,6 @@ public class AgentProcessParentImplTest {
         assertThat(cmd.get(5), is("-jar"));
         assertThat(cmd.get(6), is("agent.jar"));
         assertThat(cmd.get(7), is("https://localhost:9443/go/"));
-    }
-
-    private Process mockProcess() throws InterruptedException {
-        return mockProcess(new ByteArrayInputStream(new byte[0]), new ByteArrayInputStream(new byte[0]), new ByteArrayOutputStream());
-    }
-
-    private Process mockProcess(final InputStream outputStream, final InputStream errorStream, final OutputStream inputStream) throws InterruptedException {
-        final Process subProcess = mock(Process.class);
-        when(subProcess.waitFor()).thenReturn(42);
-        when(subProcess.getInputStream()).thenReturn(outputStream);
-        when(subProcess.getErrorStream()).thenReturn(errorStream);
-        when(subProcess.getOutputStream()).thenReturn(inputStream);
-        return subProcess;
     }
 
     @Test
@@ -173,8 +161,8 @@ public class AgentProcessParentImplTest {
         AgentProcessParentImpl bootstrapper = createBootstrapper(cmd, subProcess);
         int returnCode = bootstrapper.run("bootstrapper_version", "bar", getURLGenerator(), new HashMap<String, String>());
         assertThat(returnCode, is(42));
-        assertThat(FileUtils.readFileToString(stderrLog).contains(stdErrMsg), is(true));
-        assertThat(FileUtils.readFileToString(stdoutLog).contains(stdOutMsg), is(true));
+        assertThat(FileUtils.readFileToString(stderrLog), containsString(stdErrMsg));
+        assertThat(FileUtils.readFileToString(stdoutLog), containsString(stdOutMsg));
     }
 
     @Test
@@ -287,4 +275,18 @@ public class AgentProcessParentImplTest {
     private ServerUrlGenerator getURLGenerator() {
         return ServerUrlGeneratorMother.generatorFor("localhost", 9090);
     }
+
+    private Process mockProcess() throws InterruptedException {
+        return mockProcess(new ByteArrayInputStream(new byte[0]), new ByteArrayInputStream(new byte[0]), new ByteArrayOutputStream());
+    }
+
+    private Process mockProcess(final InputStream outputStream, final InputStream errorStream, final OutputStream inputStream) throws InterruptedException {
+        final Process subProcess = mock(Process.class);
+        when(subProcess.waitFor()).thenReturn(42);
+        when(subProcess.getInputStream()).thenReturn(outputStream);
+        when(subProcess.getErrorStream()).thenReturn(errorStream);
+        when(subProcess.getOutputStream()).thenReturn(inputStream);
+        return subProcess;
+    }
+
 }

@@ -187,7 +187,7 @@ public class HgMaterialTest {
     @Test
     public void shouldLogRepoInfoToConsoleOutWithoutFolder() throws Exception {
         hgMaterial.updateTo(outputStreamConsumer, new StringRevision("0"), workingFolder, new TestSubprocessExecutionContext());
-        assertThat(outputStreamConsumer.getStdOut(), JUnitMatchers.containsString(
+        assertThat(outputStreamConsumer.getStdOut(), containsString(
                 format("Start updating %s at revision %s from %s", "files", "0",
                         hgMaterial.getUrl())));
     }
@@ -208,7 +208,7 @@ public class HgMaterialTest {
             hgMaterial.latestModification(workingFolder, new TestSubprocessExecutionContext());
             fail("Should have thrown an exception when failed to clone from an invalid url");
         } catch (Exception e) {
-            assertThat(e.getMessage(), StringContains.containsString("abort: repository " + url + " not found!"));
+            assertThat(e.getMessage(), containsString("abort: repository " + url + " not found!"));
         }
     }
 

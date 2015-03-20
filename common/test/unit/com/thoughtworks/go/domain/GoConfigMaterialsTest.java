@@ -40,6 +40,7 @@ import com.thoughtworks.go.domain.scm.SCMMother;
 import com.thoughtworks.go.helper.MaterialConfigsMother;
 import org.junit.Test;
 
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.core.Is.is;
@@ -152,7 +153,7 @@ public class GoConfigMaterialsTest {
         CruiseConfig config = new CruiseConfig(new PipelineConfigs(up1, up2, down1, down2));
         Set<StageConfig> stages = config.getStagesUsedAsMaterials(up1);
         assertThat(stages.size(), is(1));
-        assertThat(stages.contains(upStage), is(true));
+        assertThat(stages, contains(upStage));
     }
 
     @Test
