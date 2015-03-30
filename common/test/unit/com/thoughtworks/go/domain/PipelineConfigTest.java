@@ -268,6 +268,12 @@ public class PipelineConfigTest {
         assertThat(pipelineConfig.errors().on(PipelineConfig.LABEL_TEMPLATE), is(nullValue()));
     }
 
+    @Test
+    public void shouldNotValidateCorrectPipelineLabelWithTruncationOfCount() {
+        String labelFormat = "pipeline-${COUNT[:7]}-alpha";
+        PipelineConfig pipelineConfig = createAndValidatePipelineLabel(labelFormat);
+        assertThat(pipelineConfig.errors().on(PipelineConfig.LABEL_TEMPLATE), startsWith("Invalid label."));
+    }
 
     @Test
     public void shouldValidatePipelineLabelWithBrokenTruncationSyntax1() {

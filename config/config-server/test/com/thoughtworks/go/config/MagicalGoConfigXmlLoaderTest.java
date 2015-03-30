@@ -1079,6 +1079,12 @@ public class MagicalGoConfigXmlLoaderTest {
     }
 
     @Test
+    public void shouldAllowTruncatedCounterInLabelTemplate() throws Exception {
+        CruiseConfig cruiseConfig = ConfigMigrator.loadWithMigration(ConfigFileFixture.LABEL_TEMPLATE_WITH_LABEL_TEMPLATE("1.3.0-${COUNT[:3]}-${git}")).config;
+        assertThat(cruiseConfig.pipelineConfigByName(new CaseInsensitiveString("cruise")).getLabelTemplate(), is("1.3.0-${COUNT[:3]}-${git}"));
+    }
+
+    @Test
     public void shouldAllowBothCounterAndMaterialNameInLabelTemplate() throws Exception {
         CruiseConfig cruiseConfig = ConfigMigrator.loadWithMigration(ConfigFileFixture.LABEL_TEMPLATE_WITH_LABEL_TEMPLATE("1.3.0-${COUNT}-${git}")).config;
         assertThat(cruiseConfig.pipelineConfigByName(new CaseInsensitiveString("cruise")).getLabelTemplate(), is("1.3.0-${COUNT}-${git}"));
